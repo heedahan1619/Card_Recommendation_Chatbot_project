@@ -51,23 +51,19 @@ class CardGorillaSpider(scrapy.Spider):
             
             self.company_dict[company_idx] = [company_name, company_name_eng, company_logo_img_url]
 
-        print(self.company_dict)
+        return [
+            scrapy.Request(
+                url=f"{self.card_url}p=1&perPage=30&corp={company_idx}"
+                ,headers=self.headers
+                ,callback=self.parse_card_data
+            )
+            for company_idx in company_idx_list
+        ]
 
-    #     return [
-    #         scrapy.Request(
-    #             url=url
-    #             ,headers=self.headers
-    #             ,callback=self.parse_card_data
-    #         )
-    #     ]
+    def parse_card_data(self, response):
+        """카드 json 데이터 로드"""
 
-    # def parse_card_data(self, response):
-    #     """카드사별 함수 만들기"""
-
-    #     for company_idx in company_idx_list:
-    #         card_url = f"{self.card_url}p=1&perPage=30&corp={company_idx}"
-    #         print(card_url)
-
-
-
-
+        res = requests.get(response.url, headers=self.headers)
+        data = res.json()['data']
+        
+        print(data)
