@@ -18,25 +18,24 @@ class CardGorillaSpider(scrapy.Spider):
     def start_requests(self):
         """크롤러가 시작하면서 실행하는 메소드"""
 
-        print("카드고릴라 접속 완료")
-
         return [
             scrapy.Request(
-                url=f"{self.json_url}card_corps"
+                url=self.home_url
                 ,headers=self.headers
                 ,callback=self.parse_company_data
             )
         ]
     
     def parse_company_data(self, response):
-        """카드사 json 데이터 불러오기"""
+        """카드사 딕셔너리 생성"""
 
-        print("카드사 json 데이터 로드 완료")
+        url = f"{self.json_url}card_corps"
 
-        res = requests.get(response.url, headers=self.headers)
+        res = requests.get(url, headers=self.headers)
         data = res.json()
 
-        company_idx_list = []
+        global company_idx_list
+        company_idx_list = [] # 카드사 인덱스 리스트 생성
         for i in range(len(data)):
             corps = data[i]
             company_idx = corps['idx'] # 카드사 인덱스
@@ -53,4 +52,21 @@ class CardGorillaSpider(scrapy.Spider):
             
             self.company_dict[company_name] = [company_idx, company_logo_img_url]
 
-        print(company_idx_list)
+        return [
+            scrapy.Request(
+                url=url
+                ,headers=self.headers
+                ,callback=self.parse_card_data
+            )
+        ]
+
+    def parse_card_data(self, response):
+        """카드사별 함수 만들기"""
+
+        for company_idx in company_idx_list:
+            card_url = f"{self.card_url}p=1&perPage=30&corp={company_idx}"
+            print(card_url)
+
+
+
+
