@@ -47,25 +47,26 @@ class CardGorillaSpider(scrapy.Spider):
             if "Card" in company_name_eng:
                 company_name_eng = company_name_eng.replace("Card", "")
             company_name_eng = company_name_eng.lower()
-        
             company_logo_img_url = corps['logo_img']['url'] # 카드사 로고 이미지 url
             
-            self.company_dict[company_name] = [company_idx, company_logo_img_url]
+            self.company_dict[company_idx] = [company_name, company_name_eng, company_logo_img_url]
 
-        return [
-            scrapy.Request(
-                url=url
-                ,headers=self.headers
-                ,callback=self.parse_card_data
-            )
-        ]
+        print(self.company_dict)
 
-    def parse_card_data(self, response):
-        """카드사별 함수 만들기"""
+    #     return [
+    #         scrapy.Request(
+    #             url=url
+    #             ,headers=self.headers
+    #             ,callback=self.parse_card_data
+    #         )
+    #     ]
 
-        for company_idx in company_idx_list:
-            card_url = f"{self.card_url}p=1&perPage=30&corp={company_idx}"
-            print(card_url)
+    # def parse_card_data(self, response):
+    #     """카드사별 함수 만들기"""
+
+    #     for company_idx in company_idx_list:
+    #         card_url = f"{self.card_url}p=1&perPage=30&corp={company_idx}"
+    #         print(card_url)
 
 
 
