@@ -53,17 +53,14 @@ class CardGorillaSpider(scrapy.Spider):
 
         return [
             scrapy.Request(
-                url=f"{self.card_url}p=1&perPage=30&corp={company_idx}"
+                url=f"{self.card_url}p={page}&perPage=30&corp={company_idx}"
                 ,headers=self.headers
                 ,callback=self.parse_card_data
             )
-            for company_idx in company_idx_list
+            for page in range(1, self.page_request+1)
         ]
 
     def parse_card_data(self, response):
         """카드 json 데이터 로드"""
 
-        res = requests.get(response.url, headers=self.headers)
-        data = res.json()['data']
-        
-        print(data)
+        print(response.url)
