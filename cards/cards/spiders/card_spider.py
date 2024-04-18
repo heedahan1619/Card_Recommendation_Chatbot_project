@@ -100,6 +100,9 @@ class CardGorillaSpider(scrapy.Spider):
                     for search_benefit in data[i]['search_benefit']: 
                         search_benefit_title = search_benefit['title'] # 검색 혜택 타이틀
                         search_benefit_title_list.append(search_benefit_title)
+                        search_benefit_label_list = [] # 검색 혜택 라벨 리스트
+                        for search_benefit_options in search_benefit['options']:
+                            search_benefit_label = search_benefit_options['label'] # 검색 혜택 라벨
+                            search_benefit_label_list.append(search_benefit_label)
 
-
-                    print(f"{search_benefit_title_list}")
+                        print(f"{search_benefit_label_list}")
