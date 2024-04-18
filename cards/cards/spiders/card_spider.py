@@ -72,4 +72,6 @@ class CardGorillaSpider(scrapy.Spider):
             if data != []:
                 for i in range(len(data)):
                     annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
-                    print(f"\n\n{annual_fee_basic}")
+                    card_type = data[i]['c_type_txt'] # 카드 타입
+
+                    print(f"{card_type}")
