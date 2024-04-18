@@ -11,7 +11,7 @@ class CardGorillaSpider(scrapy.Spider):
 
     home_url = "https://www.card-gorilla.com/home"
     json_url = "https://api.card-gorilla.com:8080/v1/"
-    card_url = "https://api.card-gorilla.com:8080/v1/cards/search?"
+    card_url = "https://api.card-gorilla.com:8080/v1/cards/"
 
     company_dict = {} # 카드사 딕셔너리 - {카드사명:[카드사 인덱스, 카드사 로고 이미지 url]}
 
@@ -53,7 +53,7 @@ class CardGorillaSpider(scrapy.Spider):
 
         return [
             scrapy.Request(
-                url=f"{self.card_url}p={page}&perPage=30&corp={company_idx}"
+                url=f"{self.card_url}search?p={page}&perPage=30&corp={company_idx}"
                 ,headers=self.headers
                 ,callback=self.parse_card_data
             )
@@ -91,5 +91,11 @@ class CardGorillaSpider(scrapy.Spider):
                         pre_month_money = f"전월실적 {pre_month_money[:3]}만원 이상"
                     else:
                         pre_month_money = "전월실적 없음"
+                    is_discon = data[i]['is_discon'] # 발급 중단 카드 
+                    if is_discon == True:
+                        is_discon = "신규발급이 중단된 카드입니다."
+                    else:
+                        is_discon = ""
 
-                    print(f"{pre_month_money}")
+
+                    print(f"{is_discon}")
