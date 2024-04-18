@@ -79,5 +79,11 @@ class CardGorillaSpider(scrapy.Spider):
                     corp_idx = data[i]['corp_idx'] # 카드사 인덱스
                     corp_name = data[i]['corp_txt'] # 카드사명
                     card_name = data[i]['name'] # 카드명
+                    only_online = data[i]['only_online'] # 온라인 전용
+                    if only_online == True:
+                        only_online = "온라인 전용 카드"
+                    else:
+                        only_online = ""
+                    
 
-                    print(f"{card_name}")
+                    print(f"{only_online}")
