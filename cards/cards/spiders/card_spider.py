@@ -77,5 +77,6 @@ class CardGorillaSpider(scrapy.Spider):
                     card_cate = f"{data[i]['cate_txt']}카드" # 카드 종류
                     card_idx = data[i]['cid'] # 카드 인덱스
                     corp_idx = data[i]['corp']['idx'] # 카드사 인덱스
+                    corp_name = data[i]['corp']['name'] # 카드사명
 
-                    print(f"{corp_idx}")
+                    print(f"{corp_name}")
