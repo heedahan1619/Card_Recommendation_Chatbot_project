@@ -79,11 +79,17 @@ class CardGorillaSpider(scrapy.Spider):
                     corp_idx = data[i]['corp_idx'] # 카드사 인덱스
                     corp_name = data[i]['corp_txt'] # 카드사명
                     card_name = data[i]['name'] # 카드명
-                    only_online = data[i]['only_online'] # 온라인 전용
+                    only_online = data[i]['only_online'] # 온라인 전용 카드
                     if only_online == True:
                         only_online = "온라인 전용 카드"
                     else:
                         only_online = ""
-                    
+                    pre_month_money = str(data[i]['pre_month_money']) # 전월실적
+                    if len(pre_month_money) == 6:
+                        pre_month_money = f"전월실적 {pre_month_money[:2]}만원 이상"
+                    elif len(pre_month_money) == 7:
+                        pre_month_money = f"전월실적 {pre_month_money[:3]}만원 이상"
+                    else:
+                        pre_month_money = "전월실적 없음"
 
-                    print(f"{only_online}")
+                    print(f"{pre_month_money}")
