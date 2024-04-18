@@ -66,4 +66,10 @@ class CardGorillaSpider(scrapy.Spider):
         for company_idx in company_idx_list:
             url = f"{response.url[:-2]}{company_idx}"
             
-            print(url)
+            res = requests.get(url, headers=self.headers)
+            data = res.json()['data']
+
+            if data != []:
+                for i in range(len(data)):
+                    annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
+                    print(f"\n\n{annual_fee_basic}")
