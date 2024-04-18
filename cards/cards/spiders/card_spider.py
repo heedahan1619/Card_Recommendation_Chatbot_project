@@ -63,4 +63,7 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_data(self, response):
         """카드 json 데이터 로드"""
 
-        print(response.url)
+        for company_idx in company_idx_list:
+            url = f"{response.url[:-2]}{company_idx}"
+            
+            print(url)
