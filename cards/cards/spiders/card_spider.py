@@ -74,5 +74,6 @@ class CardGorillaSpider(scrapy.Spider):
                     annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
                     card_type = data[i]['c_type_txt'] # 카드 타입
                     card_img_url = data[i]['card_img']['url'] # 카드 이미지 url
+                    card_cate = f"{data[i]['cate_txt']}카드" # 카드 종류
 
-                    print(f"{card_img_url}")
+                    print(f"{card_cate}")
