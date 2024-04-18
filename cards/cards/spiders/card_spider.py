@@ -96,6 +96,10 @@ class CardGorillaSpider(scrapy.Spider):
                         is_discon = "신규발급이 중단된 카드입니다."
                     else:
                         is_discon = ""
+                    search_benefit_title_list = [] # 검색 혜택 타이틀 리스트
+                    for search_benefit in data[i]['search_benefit']: 
+                        search_benefit_title = search_benefit['title'] # 검색 혜택 타이틀
+                        search_benefit_title_list.append(search_benefit_title)
 
 
-                    print(f"{is_discon}")
+                    print(f"{search_benefit_title_list}")
