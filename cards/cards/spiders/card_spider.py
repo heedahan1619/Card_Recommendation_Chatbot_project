@@ -62,8 +62,8 @@ class CardGorillaSpider(scrapy.Spider):
         """카드 json 데이터 로드"""
 
         for company_idx in company_idx_list:
+
             url = f"{response.url[:-2]}{company_idx}"
-            
             res = requests.get(url, headers=self.headers)
             data = res.json()['data']
 
@@ -116,4 +116,15 @@ class CardGorillaSpider(scrapy.Spider):
                         top_benefit_tags_list.append(top_benefit_tags)
                         top_benefit_dict[top_benefit_title] = top_benefit_tags
                     
-                    print(top_benefit_dict)
+                    return [
+                        scrapy.Request(
+                            url=f"{self.json_url}cards/{card_idx}"
+                            ,headers=self.headers
+                            ,callback=self.parse_card_detail
+                        )
+                    ]
+            
+    def parse_card_detail(self, response):
+        """카드 세부 정보 추출"""
+
+        print(response.url)
