@@ -47,7 +47,6 @@ class CardGorillaSpider(scrapy.Spider):
                 company_name_eng = company_name_eng.replace("Card", "")
             company_name_eng = company_name_eng.lower()
             company_logo_img_url = corps['logo_img']['url'] # 카드사 로고 이미지 url
-            
             self.company_dict[company_idx] = [company_name, company_name_eng, company_logo_img_url]
 
         return [
@@ -106,5 +105,7 @@ class CardGorillaSpider(scrapy.Spider):
                             search_benefit_label = search_benefit_options['label'] # 검색 혜택 라벨
                             search_benefit_label_list.append(search_benefit_label)
                         search_benefit_dict[search_benefit_title] = search_benefit_label_list
-
-                    print(search_benefit_dict)
+                    top_benefit_title_list = [] # 상위 혜택 타이틀 리스트
+                    for top_benefit in data[i]['top_benefit']:
+                        top_benefit_title = top_benefit['title'] # 상위 혜택 타이틀
+                        top_benefit_title_list.append(top_benefit_title)
