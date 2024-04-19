@@ -11,7 +11,6 @@ class CardGorillaSpider(scrapy.Spider):
 
     home_url = "https://www.card-gorilla.com/home"
     json_url = "https://api.card-gorilla.com:8080/v1/"
-    card_url = "https://api.card-gorilla.com:8080/v1/cards/"
 
     company_dict = {} # 카드사 딕셔너리 - {카드사명:[카드사 인덱스, 카드사 로고 이미지 url]}
 
@@ -53,7 +52,7 @@ class CardGorillaSpider(scrapy.Spider):
 
         return [
             scrapy.Request(
-                url=f"{self.card_url}search?p={page}&perPage=30&corp={company_idx}"
+                url=f"{self.json_url}cards/search?p={page}&perPage=30&corp={company_idx}"
                 ,headers=self.headers
                 ,callback=self.parse_card_data
             )
@@ -96,6 +95,8 @@ class CardGorillaSpider(scrapy.Spider):
                         is_discon = "신규발급이 중단된 카드입니다."
                     else:
                         is_discon = ""
+                    global search_benefit_dict
+                    search_benefit_dict = {} # 검색 혜택 딕셔너리 - {검색 혜택 타이틀:[검색 혜택 라벨]}
                     search_benefit_title_list = [] # 검색 혜택 타이틀 리스트
                     for search_benefit in data[i]['search_benefit']: 
                         search_benefit_title = search_benefit['title'] # 검색 혜택 타이틀
@@ -104,5 +105,6 @@ class CardGorillaSpider(scrapy.Spider):
                         for search_benefit_options in search_benefit['options']:
                             search_benefit_label = search_benefit_options['label'] # 검색 혜택 라벨
                             search_benefit_label_list.append(search_benefit_label)
+                        search_benefit_dict[search_benefit_title] = search_benefit_label_list
 
-                        print(f"{search_benefit_label_list}")
+                    print(search_benefit_dict)
