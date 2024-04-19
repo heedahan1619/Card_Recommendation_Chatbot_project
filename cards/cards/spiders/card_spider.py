@@ -1,5 +1,6 @@
 import scrapy
 import requests
+import re
 
 class CardGorillaSpider(scrapy.Spider):
     """카드고릴라 사이트 spider"""
@@ -67,6 +68,8 @@ class CardGorillaSpider(scrapy.Spider):
             res = requests.get(url, headers=self.headers)
             data = res.json()['data']
 
+            # print(f"url: {url}")
+            
             if data != []:
                 for i in range(len(data)):
                     annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
@@ -77,9 +80,9 @@ class CardGorillaSpider(scrapy.Spider):
                     corp_idx = data[i]['corp_idx'] # 카드사 인덱스
                     corp_name = data[i]['corp_txt'] # 카드사명
                     card_name = data[i]['name'] # 카드명
-                    only_online = data[i]['only_online'] # 온라인 전용 카드
+                    only_online = data[i]['only_online'] # 온라인발급 전용 카드
                     if only_online == True:
-                        only_online = "온라인 전용 카드"
+                        only_online = "온라인발급 전용 카드"
                     else:
                         only_online = ""
                     pre_month_money = str(data[i]['pre_month_money']) # 전월실적
@@ -115,16 +118,13 @@ class CardGorillaSpider(scrapy.Spider):
                         top_benefit_tags = f"{top_benefit['tags'][0]} {top_benefit['tags'][1]} {top_benefit['tags'][2]}" # 상위 혜택 태그
                         top_benefit_tags_list.append(top_benefit_tags)
                         top_benefit_dict[top_benefit_title] = top_benefit_tags
-                    
-                    return [
-                        scrapy.Request(
-                            url=f"{self.json_url}cards/{card_idx}"
-                            ,headers=self.headers
-                            ,callback=self.parse_card_detail
-                        )
-                    ]
-            
-    def parse_card_detail(self, response):
-        """카드 세부 정보 추출"""
 
-        print(response.url)
+                    card_url = f"{self.json_url}cards/{card_idx}"
+                    
+                    res = requests.get(card_url, headers=self.headers)
+                    card = res.json()
+
+                    card_pr = card['corp']['pr_container'] # 이벤트 문구
+                    card_pr = re.sub('(\\<(\\/)?p\\>)', '', card_pr)
+
+                    print(f"\n{card_pr}")
