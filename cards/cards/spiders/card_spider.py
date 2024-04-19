@@ -106,6 +106,9 @@ class CardGorillaSpider(scrapy.Spider):
                             search_benefit_label_list.append(search_benefit_label)
                         search_benefit_dict[search_benefit_title] = search_benefit_label_list
                     top_benefit_title_list = [] # 상위 혜택 타이틀 리스트
+                    top_benefit_tags_list = [] # 상위 혜택 태그 리스트
                     for top_benefit in data[i]['top_benefit']:
                         top_benefit_title = top_benefit['title'] # 상위 혜택 타이틀
                         top_benefit_title_list.append(top_benefit_title)
+                        top_benefit_tags = f"{top_benefit['tags'][0]} {top_benefit['tags'][1]} {top_benefit['tags'][2]}" # 상위 혜택 태그
+                        top_benefit_tags_list.append(top_benefit_tags)
