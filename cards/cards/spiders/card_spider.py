@@ -127,4 +127,7 @@ class CardGorillaSpider(scrapy.Spider):
                     card_pr = card['corp']['pr_container'] # 이벤트 문구
                     card_pr = re.sub('(\\<(\\/)?p\\>)', '', card_pr)
 
-                    print(f"\n{card_pr}")
+                    card_pr_detail = card['corp']['pr_detail'] # 이벤트 상세
+
+
+                    print(f"\n{card_pr_detail}")
