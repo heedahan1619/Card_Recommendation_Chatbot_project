@@ -127,7 +127,10 @@ class CardGorillaSpider(scrapy.Spider):
                     card_pr = card['corp']['pr_container'] # 이벤트 문구
                     card_pr = re.sub('(\\<(\\/)?p\\>)', '', card_pr)
 
-                    card_pr_detail = card['corp']['pr_detail'] # 이벤트 상세
+                    card_pr_detail = card['corp']['pr_detail'].replace('&quot;', '"').replace('&rarr;', '→').replace('&middot;', '·') # 이벤트 상세
+
+                    annual_fee_detail = card['annual_fee_detail'].replace('&amp;', '&').replace('&trade;', '™') # 연회비 상세안내
 
 
-                    print(f"\n{card_pr_detail}")
+                    print(f"\n{annual_fee_detail}")
+
