@@ -128,9 +128,18 @@ class CardGorillaSpider(scrapy.Spider):
                     card_pr = re.sub('(\\<(\\/)?p\\>)', '', card_pr)
 
                     card_pr_detail = card['corp']['pr_detail'].replace('&quot;', '"').replace('&rarr;', '→').replace('&middot;', '·') # 이벤트 상세
+                    card_pr_detail = re.sub('\\<br\\>', '\n', card_pr_detail)
 
                     annual_fee_detail = card['annual_fee_detail'].replace('&amp;', '&').replace('&trade;', '™') # 연회비 상세안내
+                    annual_fee_detail = re.sub('\\<br\\>', '\n', annual_fee_detail)
+                    annual_fee_detail = re.sub('\\<p.+\\>', '', annual_fee_detail)
 
+                    brand_code_list = [] # 브랜드 코드 리스트 생성
+                    for brand in card['brand']:
+                        brand_name = brand['name'] # 브랜드명
+                        brand_code = brand['code'] # 브랜드 코드
+                        brand_code_list.append(brand_code)
+                        brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
 
-                    print(f"\n{annual_fee_detail}")
+                    print(f"\n{brand_code_list}")
 
