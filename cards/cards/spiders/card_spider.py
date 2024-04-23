@@ -128,8 +128,7 @@ class CardGorillaSpider(scrapy.Spider):
                     card_pr = card['corp']['pr_container'] # 이벤트 문구
                     card_pr = re.sub('(\\<(\\/)?p\\>)', '', card_pr)
 
-                    card_pr_detail = card['corp']['pr_detail'].replace('&quot;', '"').replace('&rarr;', '→').replace('&middot;', '·') # 이벤트 상세
-                    card_pr_detail = re.sub('\\<br\\>', '\n', card_pr_detail)
+                    card_pr_detail = card['corp']['pr_detail'].replace('&quot;', '"').replace('&rarr;', '→').replace('&middot;', '·') # 이벤트 상세안내
 
                     annual_fee_detail = card['annual_fee_detail'].replace('&amp;', '&').replace('&trade;', '™') # 연회비 상세안내
                     annual_fee_detail = re.sub('<br>', '\n', annual_fee_detail)
@@ -149,9 +148,9 @@ class CardGorillaSpider(scrapy.Spider):
                         key_benefit_comment = key['comment'] # 주요 혜택 설명
                         key_benefit_title = key['title'] # 주요 혜택 타이틀
                         key_benefit_logo_img_url = key['cate']['logo_img']['url'] # 주요 혜택 로고 이미지 url
-                        key_benefit_info = key['info'].replace('&nbsp;', '\n').replace('<br>', '').replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&quot;', '"').replace('&amp;', '&').replace('&middot;', '·').replace('&bull;', '•').replace('&trade;', '™').replace("&#39;", "'").replace('&gt;', '>').replace('&lsquo;', '‘').replace('&rsquo;', '’') # 주요 혜택 상세안내
-                        key_benefit_info = re.sub('<p(\\s\\S+)+>', '', key_benefit_info)
-                        # key_benefit_info = re.sub('(<p>-)', '\n-', key_benefit_info)
+                        key_benefit_info = key['info'].replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&quot;', '"').replace('&amp;', '&').replace('&middot;', '·').replace('&bull;', '•').replace('&trade;', '™').replace("&#39;", "'").replace('&gt;', '>').replace('&lsquo;', '‘').replace('&rsquo;', '’') # 주요 혜택 상세안내
+                        key_benefit_info = re.sub('<p(\\s\\S+)+>|(<\\/p>)|<br>', '', key_benefit_info)
+                        key_benefit_info = re.sub('(<p>)|&nbsp;', '\n', key_benefit_info)
 
                         print(f"{card_idx}\t{key_benefit_info}\n")
                     
