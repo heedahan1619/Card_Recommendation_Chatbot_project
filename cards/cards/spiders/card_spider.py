@@ -14,6 +14,7 @@ class CardGorillaSpider(scrapy.Spider):
     json_url = "https://api.card-gorilla.com:8080/v1/"
 
     company_dict = {} # 카드사 딕셔너리 - {카드사명:[카드사 인덱스, 카드사 로고 이미지 url]}
+    brand_dict = {} # 카드 브랜드 딕셔너리 - {카드 브랜드 코드:[카드 브랜드명, 카드 브랜드 인덱스, 카드 브랜드 로고 이미지 url]}
 
     def start_requests(self):
         """크롤러가 시작하면서 실행하는 메소드"""
@@ -134,12 +135,14 @@ class CardGorillaSpider(scrapy.Spider):
                     annual_fee_detail = re.sub('\\<br\\>', '\n', annual_fee_detail)
                     annual_fee_detail = re.sub('\\<p.+\\>', '', annual_fee_detail)
 
-                    brand_code_list = [] # 브랜드 코드 리스트 생성
+                    brand_code_list = [] # 카드 브랜드 코드 리스트 생성
                     for brand in card['brand']:
-                        brand_name = brand['name'] # 브랜드명
-                        brand_code = brand['code'] # 브랜드 코드
+                        brand_idx = brand['idx'] # 카드 브랜드 인덱스
+                        brand_name = brand['name'] # 카드 브랜드명
+                        brand_code = brand['code'] # 카드 브랜드 코드
                         brand_code_list.append(brand_code)
-                        brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
+                        brand_logo_img_url = brand['logo_img']['url'] # 카드 브랜드 로고 이미지 url
+                        self.brand_dict[brand_code] = [brand_idx, brand_name, brand_logo_img_url]
 
-                    print(f"\n{brand_code_list}")
+                    print(f"\n{self.brand_dict}")
 
