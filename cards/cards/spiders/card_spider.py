@@ -144,5 +144,11 @@ class CardGorillaSpider(scrapy.Spider):
                         brand_logo_img_url = brand['logo_img']['url'] # 카드 브랜드 로고 이미지 url
                         self.brand_dict[brand_code] = [brand_idx, brand_name, brand_logo_img_url]
 
-                    print(f"\n{self.brand_dict}")
+                    for key in card['key_benefit']:
+                        key_idx = key['cate_idx'] # 주요 혜택 인덱스
+
+                        print(f"{key_idx}\n")
+                    
+
+                    # print(f"\n{card_type}")
 
