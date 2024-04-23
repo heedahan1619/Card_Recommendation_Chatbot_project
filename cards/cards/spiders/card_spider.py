@@ -147,8 +147,9 @@ class CardGorillaSpider(scrapy.Spider):
                     for key in card['key_benefit']:
                         key_idx = key['cate_idx'] # 주요 혜택 인덱스
                         key_comment = key['comment'] # 주요 혜택 설명
+                        key_title = key['title'] # 주요 혜택 타이틀
 
-                        print(f"{key_comment}\n")
+                        print(f"{key_title}\n")
                     
 
                     # print(f"\n{card_type}")
