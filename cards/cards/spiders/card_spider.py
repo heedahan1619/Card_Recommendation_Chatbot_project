@@ -143,17 +143,17 @@ class CardGorillaSpider(scrapy.Spider):
                         brand_logo_img_url = brand['logo_img']['url'] # 카드 브랜드 로고 이미지 url
                         self.brand_dict[brand_code] = [brand_idx, brand_name, brand_logo_img_url]
 
+                    key_benefit_dict = {} # 주요 혜택 딕셔너리 생성 - {주요 혜택 타이틀:[주요 혜택 로고 이미지 url, 주요 혜택 문구, 주요 혜택 상세안내]}
                     for key in card['key_benefit']:
                         key_benefit_idx = key['cate_idx'] # 주요 혜택 인덱스
-                        key_benefit_comment = key['comment'] # 주요 혜택 설명
+                        key_benefit_comment = key['comment'] # 주요 혜택 문구
                         key_benefit_title = key['title'] # 주요 혜택 타이틀
                         key_benefit_logo_img_url = key['cate']['logo_img']['url'] # 주요 혜택 로고 이미지 url
                         key_benefit_info = key['info'].replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&quot;', '"').replace('&amp;', '&').replace('&middot;', '·').replace('&bull;', '•').replace('&trade;', '™').replace("&#39;", "'").replace('&gt;', '>').replace('&lsquo;', '‘').replace('&rsquo;', '’') # 주요 혜택 상세안내
                         key_benefit_info = re.sub('<p(\\s\\S+)+>|(<\\/p>)|<br>', '', key_benefit_info)
                         key_benefit_info = re.sub('(<p>)|&nbsp;', '\n', key_benefit_info)
+                        key_benefit_dict[key_benefit_title] = [key_benefit_logo_img_url, key_benefit_comment, key_benefit_info]
 
-                        print(f"{card_idx}\t{key_benefit_info}\n")
+                    print(f"{card_idx}\t{key_benefit_dict}\n")
                     
-
-                    # print(f"\n{card_type}")
 
