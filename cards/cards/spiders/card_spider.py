@@ -145,11 +145,13 @@ class CardGorillaSpider(scrapy.Spider):
                         self.brand_dict[brand_code] = [brand_idx, brand_name, brand_logo_img_url]
 
                     for key in card['key_benefit']:
-                        key_idx = key['cate_idx'] # 주요 혜택 인덱스
-                        key_comment = key['comment'] # 주요 혜택 설명
-                        key_title = key['title'] # 주요 혜택 타이틀
+                        key_benefit_idx = key['cate_idx'] # 주요 혜택 인덱스
+                        key_benefit_comment = key['comment'] # 주요 혜택 설명
+                        key_benefit_title = key['title'] # 주요 혜택 타이틀
+                        key_benefit_logo_img_url = key['cate']['logo_img']['url'] # 주요 혜택 로고 이미지 url
+                        key_benefit_info = key['info'] # 주요 혜택 상세안내
 
-                        print(f"{key_title}\n")
+                        print(f"{key_benefit_info}\n")
                     
 
                     # print(f"\n{card_type}")
