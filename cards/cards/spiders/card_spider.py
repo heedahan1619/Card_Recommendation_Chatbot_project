@@ -50,18 +50,18 @@ class CardGorillaSpider(scrapy.Spider):
             company_name_eng = company_name_eng.lower()
             company_logo_img_url = corps['logo_img']['url'] # 카드사 로고 이미지 url
             self.company_dict[company_idx] = [company_name, company_name_eng, company_logo_img_url]
-
-        for page in range(1, self.page_request+1):
-            yield scrapy.Request(
-                url=f"{self.json_url}cards/search?p={page}&perPage=30&corp={company_idx}"
-                ,headers=self.headers
-                ,callback=self.parse_card_data
-            )
+            
+            for page in range(1, self.page_request+1):
+                yield scrapy.Request(
+                    url=f"{self.json_url}cards/search?p={page}&perPage=30&corp={company_idx}"
+                    ,headers=self.headers
+                    ,callback=self.parse_card_data
+                )
 
     def parse_card_data(self, response):
         """카드 json 데이터 로드"""
 
-        print(f"response.url: {response.url}")
+        print(f"url: {response.url}")
 
         for company_idx in company_idx_list:
 
