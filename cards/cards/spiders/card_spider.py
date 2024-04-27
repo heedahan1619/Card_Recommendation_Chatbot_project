@@ -61,109 +61,71 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_data(self, response):
         """카드 json 데이터 로드"""
 
-        print(f"url: {response.url}")
+        res = requests.get(response.url, headers=self.headers)
+        data = res.json()['data']
 
-        for company_idx in company_idx_list:
+        if data != []:
+            for i in range(len(data)):
 
-            url = f"{response.url[:-2]}{company_idx}"
-            res = requests.get(url, headers=self.headers)
-            data = res.json()['data']
-            
-            if data != []:
-                for i in range(len(data)):
+                annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
+                
+                card_type = data[i]['c_type_txt'] # 카드 타입
+                
+                card_img_url = data[i]['card_img']['url'] # 카드 이미지 url
+                
+                card_cate = f"{data[i]['cate_txt']}카드" # 카드 종류
+                
+                card_idx = data[i]['cid'] # 카드 인덱스
+                
+                corp_idx = data[i]['corp_idx'] # 카드사 인덱스
+                
+                corp_name = data[i]['corp_txt'] # 카드사명
+                
+                card_name = data[i]['name'] # 카드명
+                
+                only_online = data[i]['only_online'] # 온라인발급 전용 카드
+                if only_online == True:
+                    only_online = "온라인발급 전용 카드"
+                else:
+                    only_online = ""
+                
+                pre_month_money = str(data[i]['pre_month_money']) # 전월실적
+                if len(pre_month_money) == 6:
+                    pre_month_money = f"전월실적 {pre_month_money[:2]}만원 이상"
+                elif len(pre_month_money) == 7:
+                    pre_month_money = f"전월실적 {pre_month_money[:3]}만원 이상"
+                else:
+                    pre_month_money = "전월실적 없음"
+                
+                is_discon = data[i]['is_discon'] # 발급 중단 카드 
+                if is_discon == True:
+                    is_discon = "신규발급이 중단된 카드입니다."
+                else:
+                    is_discon = ""
 
-                    annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
-                    
-                    card_type = data[i]['c_type_txt'] # 카드 타입
-                    
-                    card_img_url = data[i]['card_img']['url'] # 카드 이미지 url
-                    
-                    card_cate = f"{data[i]['cate_txt']}카드" # 카드 종류
-                    
-                    card_idx = data[i]['cid'] # 카드 인덱스
-                    
-                    corp_idx = data[i]['corp_idx'] # 카드사 인덱스
-                    
-                    corp_name = data[i]['corp_txt'] # 카드사명
-                    
-                    card_name = data[i]['name'] # 카드명
-                    
-                    only_online = data[i]['only_online'] # 온라인발급 전용 카드
-                    if only_online == True:
-                        only_online = "온라인발급 전용 카드"
-                    else:
-                        only_online = ""
-                    
-                    pre_month_money = str(data[i]['pre_month_money']) # 전월실적
-                    if len(pre_month_money) == 6:
-                        pre_month_money = f"전월실적 {pre_month_money[:2]}만원 이상"
-                    elif len(pre_month_money) == 7:
-                        pre_month_money = f"전월실적 {pre_month_money[:3]}만원 이상"
-                    else:
-                        pre_month_money = "전월실적 없음"
-                    
-                    is_discon = data[i]['is_discon'] # 발급 중단 카드 
-                    if is_discon == True:
-                        is_discon = "신규발급이 중단된 카드입니다."
-                    else:
-                        is_discon = ""
+                global search_benefit_dict
+                search_benefit_dict = {} # 검색 혜택 딕셔너리 - {검색 혜택 타이틀:[검색 혜택 라벨]}
+                search_benefit_title_list = [] # 검색 혜택 타이틀 리스트
+                for search_benefit in data[i]['search_benefit']: 
+                    search_benefit_title = search_benefit['title'] # 검색 혜택 타이틀
+                    search_benefit_title_list.append(search_benefit_title)
+                    search_benefit_label_list = [] # 검색 혜택 라벨 리스트
+                    for search_benefit_options in search_benefit['options']:
+                        search_benefit_label = search_benefit_options['label'] # 검색 혜택 라벨
+                        search_benefit_label_list.append(search_benefit_label)
+                    search_benefit_dict[search_benefit_title] = search_benefit_label_list
+                
+                global top_benefit_dict
+                top_benefit_dict = {} # 상위 혜택 딕셔너리 - {상위 혜택 태그:[상위 혜택 로고 이미지 url, 상위 혜택 타이틀]}
+                top_benefit_title_list = [] # 상위 혜택 타이틀 리스트
+                top_benefit_tags_list = [] # 상위 혜택 태그 리스트
+                for top_benefit in data[i]['top_benefit']:
+                    top_benefit_title = top_benefit['title'] # 상위 혜택 타이틀
+                    top_benefit_title_list.append(top_benefit_title)
+                    top_benefit_tags = f"{top_benefit['tags'][0]} {top_benefit['tags'][1]} {top_benefit['tags'][2]}" # 상위 혜택 태그
+                    top_benefit_tags_list.append(top_benefit_tags)
+                    top_benefit_logo_img_url = top_benefit['logo_img']['url']
+                    top_benefit_dict[top_benefit_tags] = [top_benefit_logo_img_url, top_benefit_title]
 
-                    global search_benefit_dict
-                    search_benefit_dict = {} # 검색 혜택 딕셔너리 - {검색 혜택 타이틀:[검색 혜택 라벨]}
-                    search_benefit_title_list = [] # 검색 혜택 타이틀 리스트
-                    for search_benefit in data[i]['search_benefit']: 
-                        search_benefit_title = search_benefit['title'] # 검색 혜택 타이틀
-                        search_benefit_title_list.append(search_benefit_title)
-                        search_benefit_label_list = [] # 검색 혜택 라벨 리스트
-                        for search_benefit_options in search_benefit['options']:
-                            search_benefit_label = search_benefit_options['label'] # 검색 혜택 라벨
-                            search_benefit_label_list.append(search_benefit_label)
-                        search_benefit_dict[search_benefit_title] = search_benefit_label_list
-                    
-                    global top_benefit_dict
-                    top_benefit_dict = {} # 상위 혜택 딕셔너리 - {상위 혜택 태그:[상위 혜택 로고 이미지 url, 상위 혜택 타이틀]}
-                    top_benefit_title_list = [] # 상위 혜택 타이틀 리스트
-                    top_benefit_tags_list = [] # 상위 혜택 태그 리스트
-                    for top_benefit in data[i]['top_benefit']:
-                        top_benefit_title = top_benefit['title'] # 상위 혜택 타이틀
-                        top_benefit_title_list.append(top_benefit_title)
-                        top_benefit_tags = f"{top_benefit['tags'][0]} {top_benefit['tags'][1]} {top_benefit['tags'][2]}" # 상위 혜택 태그
-                        top_benefit_tags_list.append(top_benefit_tags)
-                        top_benefit_logo_img_url = top_benefit['logo_img']['url']
-                        top_benefit_dict[top_benefit_tags] = [top_benefit_logo_img_url, top_benefit_title]
-
-                    card_url = f"{self.json_url}cards/{card_idx}"
-                    
-                    res = requests.get(card_url, headers=self.headers)
-                    card = res.json()
-
-                    card_pr = card['corp']['pr_container'] # 이벤트 문구
-                    card_pr = re.sub('(\\<(\\/)?p\\>)', '', card_pr)
-
-                    card_pr_detail = card['corp']['pr_detail'].replace('&quot;', '"').replace('&rarr;', '→').replace('&middot;', '·') # 이벤트 상세안내
-
-                    annual_fee_detail = card['annual_fee_detail'].replace('&amp;', '&').replace('&trade;', '™') # 연회비 상세안내
-                    annual_fee_detail = re.sub('<br>', '\n', annual_fee_detail)
-                    annual_fee_detail = re.sub('<p(\\s\\S+)+>', '', annual_fee_detail)
-
-                    brand_code_list = [] # 카드 브랜드 코드 리스트 생성
-                    for brand in card['brand']:
-                        brand_idx = brand['idx'] # 카드 브랜드 인덱스
-                        brand_name = brand['name'] # 카드 브랜드명
-                        brand_code = brand['code'] # 카드 브랜드 코드
-                        brand_code_list.append(brand_code)
-                        brand_logo_img_url = brand['logo_img']['url'] # 카드 브랜드 로고 이미지 url
-                        self.brand_dict[brand_code] = [brand_idx, brand_name, brand_logo_img_url]
-
-                    key_benefit_dict = {} # 주요 혜택 딕셔너리 생성 - {주요 혜택 타이틀:[주요 혜택 로고 이미지 url, 주요 혜택 문구, 주요 혜택 상세안내]}
-                    for key in card['key_benefit']:
-                        key_benefit_idx = key['cate_idx'] # 주요 혜택 인덱스
-                        key_benefit_comment = key['comment'] # 주요 혜택 문구
-                        key_benefit_title = key['title'] # 주요 혜택 타이틀
-                        key_benefit_logo_img_url = key['cate']['logo_img']['url'] # 주요 혜택 로고 이미지 url
-                        key_benefit_info = key['info'].replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&quot;', '"').replace('&amp;', '&').replace('&middot;', '·').replace('&bull;', '•').replace('&trade;', '™').replace("&#39;", "'").replace('&gt;', '>').replace('&lsquo;', '‘').replace('&rsquo;', '’') # 주요 혜택 상세안내
-                        key_benefit_info = re.sub('<p(\\s\\S+)+>|(<\\/p>)|<br>', '', key_benefit_info)
-                        key_benefit_info = re.sub('(<p>)|&nbsp;', '\n', key_benefit_info)
-                        key_benefit_dict[key_benefit_title] = [key_benefit_logo_img_url, key_benefit_comment, key_benefit_info]
-
-                    request_m = card['request_m'] # 카드사 바로가기 url
+                url=f"{self.json_url}cards/{card_idx}"
+                print(url)
