@@ -146,5 +146,6 @@ class CardGorillaSpider(scrapy.Spider):
 
         for awards in data['awards']:
             awards_title = awards['title'] # 수상 타이틀
-            print(awards_title)
+            awards_contents = awards['contents'] # 수상 내용
+            print(awards_contents)
         
