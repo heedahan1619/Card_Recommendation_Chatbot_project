@@ -143,12 +143,18 @@ class CardGorillaSpider(scrapy.Spider):
         data = res.json()
 
         annual_fee_detail = data['annual_fee_detail'] # 연회비 상세안내
-        annual_fee_detail = re.sub(r'\<p(\s(\S)+)+\>|\<\S+\>', '', annual_fee_detail).replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&')
+        annual_fee_detail = re.sub(r'\<p(\s(\S)+)+\>|\<\S+\>', '', annual_fee_detail).replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&').strip()
 
+        awards_list = [] # 수상 내역 리스트
         for awards in data['awards']:
             awards_title = awards['title'] # 수상 타이틀
-            awards_contents = awards['contents'] # 수상 내용
+            awards_contents = awards['contents'] # 수상 내역
             awards_contents = re.sub(r'\<\S+ class="title"\>', '\n', awards_contents)
-            awards_contents = re.sub(r'\<(\/)?\S+(\s\S+)?\>', '', awards_contents)
-            print(awards_contents)
+            awards_contents = re.sub(r'\<(\/)?\S+(\s\S+)?\>|\<\S+((\s\S+)+)?\>', '', awards_contents).strip()
+            if awards_contents != '':
+                awards_list.append(awards_contents)
+
+        if awards_list != []:
+            for award in awards_list:
+                print(award)
         
