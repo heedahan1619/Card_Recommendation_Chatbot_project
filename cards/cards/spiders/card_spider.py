@@ -67,7 +67,8 @@ class CardGorillaSpider(scrapy.Spider):
         if data != []:
             for i in range(len(data)):
 
-                annual_fee_basic = data[i]['annual_fee_basic'].replace("[", "").replace("]", "") # 연회비 기본
+                annual_fee_basic = data[i]['annual_fee_basic'] # 연회비 기본
+                annual_fee_basic = annual_fee_basic.replace('[', '').replace(']', '')
                 
                 card_type = data[i]['c_type_txt'] # 카드 타입
                 
@@ -142,10 +143,12 @@ class CardGorillaSpider(scrapy.Spider):
         data = res.json()
 
         annual_fee_detail = data['annual_fee_detail'] # 연회비 상세안내
-        annual_fee_detail = re.sub('\\<p(\\s(\\S)+)+\\>|\\<\\S+\\>', '', annual_fee_detail).replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&')
+        annual_fee_detail = re.sub(r'\<p(\s(\S)+)+\>|\<\S+\>', '', annual_fee_detail).replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&')
 
         for awards in data['awards']:
             awards_title = awards['title'] # 수상 타이틀
             awards_contents = awards['contents'] # 수상 내용
+            awards_contents = re.sub(r'\<\S+ class="title"\>', '\n', awards_contents)
+            awards_contents = re.sub(r'\<(\/)?\S+(\s\S+)?\>', '', awards_contents)
             print(awards_contents)
         
