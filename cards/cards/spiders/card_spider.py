@@ -127,5 +127,19 @@ class CardGorillaSpider(scrapy.Spider):
                     top_benefit_logo_img_url = top_benefit['logo_img']['url']
                     top_benefit_dict[top_benefit_tags] = [top_benefit_logo_img_url, top_benefit_title]
 
-                url=f"{self.json_url}cards/{card_idx}"
-                print(url)
+                yield scrapy.Request(
+                    url=f"{self.json_url}cards/{card_idx}"
+                    ,headers=self.headers
+                    ,callback=self.parse_add_card_data
+                )
+
+    def parse_add_card_data(self, response):
+        """추가적인 카드 json 데이터 로드"""
+    
+        res = requests.get(response.url, headers=self.headers)
+        data = res.json()
+
+        annual_fee_detail = data['annual_fee_detail'] # 연회비 상세안내
+        annual_fee_detail = annual_fee_detail.replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&')
+        annual_fee_detail = re.sub('\\<p(\\s(\\S)+)+\\>|\\<\\S+\\>', '', annual_fee_detail)
+        print(f"\n{annual_fee_detail}")
