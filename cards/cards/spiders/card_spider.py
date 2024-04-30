@@ -156,7 +156,8 @@ class CardGorillaSpider(scrapy.Spider):
 
         for brand in data['brand']:
             brand_idx = brand['idx'] # 브랜드 인덱스
+            brand_name = brand['name'] # 브랜드명
 
-            print(f"{brand_idx}")
+            print(f"{brand_name}")
         
         
