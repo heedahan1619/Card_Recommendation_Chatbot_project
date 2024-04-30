@@ -154,7 +154,9 @@ class CardGorillaSpider(scrapy.Spider):
             if awards_contents != '':
                 awards_list.append(awards_contents)
 
-        if awards_list != []:
-            for award in awards_list:
-                print(award)
+        for brand in data['brand']:
+            brand_idx = brand['idx'] # 브랜드 인덱스
+
+            print(f"{brand_idx}")
+        
         
