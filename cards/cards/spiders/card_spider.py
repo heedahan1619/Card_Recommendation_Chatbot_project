@@ -158,7 +158,8 @@ class CardGorillaSpider(scrapy.Spider):
             brand_idx = brand['idx'] # 브랜드 인덱스
             brand_name = brand['name'] # 브랜드명
             brand_code = brand['code'] # 브랜드코드
+            brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
 
-            print(f"{brand_code}")
+            print(f"{brand_logo_img_url}")
         
         
