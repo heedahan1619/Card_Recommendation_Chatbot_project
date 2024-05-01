@@ -162,6 +162,7 @@ class CardGorillaSpider(scrapy.Spider):
             brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
             brand_list.append(brand_code)
 
+        key_benefit_list = [] # 주요혜택 리스트 - [주요혜택 로고 이미지 url, 주요혜택 타이틀, 주요혜택 내용, 주요혜택 상세안내]
         for key_benefit in data['key_benefit']:
             key_benefit_logo_img_url = key_benefit['cate']['logo_img']['url'] # 주요혜택 로고 이미지 url
             key_benefit_title = key_benefit['title'] # 주요혜택 타이틀
@@ -169,5 +170,8 @@ class CardGorillaSpider(scrapy.Spider):
             key_benefit_info = key_benefit['info'] # 주요혜택 상세안내
             key_benefit_info = re.sub(r'\<\/p\>', '\n', key_benefit_info)
             key_benefit_info = re.sub(r'\<(\/)?(p|strong|br)((\s\S+)+)?\>', '', key_benefit_info).replace('&nbsp;', ' ').replace('&amp;', '&').replace('&ndash;', '–').replace('&sup1;', '¹').replace('&sup2;', '²').replace('&sup3;', '³').replace('&trade;', '™').replace('&times;', '×').replace('&lt;', '<').replace('&gt;', '>').replace('&middot;', '·').replace('&bull;', '•').replace("&#39;", "'").replace('&quot;', '"').replace('&lsquo;', '‘').replace('&rsquo;', '’').replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&rarr;', '→')
+            key_benefit_list.append([key_benefit_logo_img_url, key_benefit_title, key_benefit_comment, key_benefit_info])
         
-            print(f"{key_benefit_info}")
+        for key_benefits in key_benefit_list:
+            print(key_benefits)
+
