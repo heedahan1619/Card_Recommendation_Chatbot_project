@@ -162,7 +162,9 @@ class CardGorillaSpider(scrapy.Spider):
             brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
             brand_list.append(brand_code)
 
-        for brands in brand_list:
-            print(brands, end='\t')
+        for key_benefit in data['key_benefit']:
+            key_benefit_logo_img_url = key_benefit['cate']['logo_img']['url'] # 주요혜택 로고 이미지 url
+        
+        print(f"{key_benefit_logo_img_url}")
         
         
