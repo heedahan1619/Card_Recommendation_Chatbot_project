@@ -164,7 +164,6 @@ class CardGorillaSpider(scrapy.Spider):
 
         for key_benefit in data['key_benefit']:
             key_benefit_logo_img_url = key_benefit['cate']['logo_img']['url'] # 주요혜택 로고 이미지 url
+            key_benefit_title = key_benefit['title'] # 주요혜택 타이틀
         
-        print(f"{key_benefit_logo_img_url}")
-        
-        
+            print(f"{key_benefit_title}")
