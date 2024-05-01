@@ -166,5 +166,6 @@ class CardGorillaSpider(scrapy.Spider):
             key_benefit_logo_img_url = key_benefit['cate']['logo_img']['url'] # 주요혜택 로고 이미지 url
             key_benefit_title = key_benefit['title'] # 주요혜택 타이틀
             key_benefit_comment = key_benefit['comment'] # 주요혜택 내용
+            key_benefit_info = key_benefit['info'] # 주요혜택 상세안내
         
-            print(f"{key_benefit_comment}")
+            print(f"{key_benefit_info}")
