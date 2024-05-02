@@ -175,5 +175,16 @@ class CardGorillaSpider(scrapy.Spider):
             key_benefit_info = re.sub(r'\<(\/)?(p|strong|br)((\s\S+)+)?\>', '', key_benefit_info).replace('&nbsp;', ' ').replace('&amp;', '&').replace('&ndash;', '–').replace('&sup1;', '¹').replace('&sup2;', '²').replace('&sup3;', '³').replace('&trade;', '™').replace('&times;', '×').replace('&lt;', '<').replace('&gt;', '>').replace('&middot;', '·').replace('&bull;', '•').replace("&#39;", "'").replace('&quot;', '"').replace('&lsquo;', '‘').replace('&rsquo;', '’').replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&rarr;', '→')
             key_benefit_list.append([key_benefit_logo_img_url, key_benefit_title, key_benefit_comment, key_benefit_info])
         
-        print(f"https://api.card-gorilla.com:8080/v1/cards/compare_top3/{response.meta['card_idx']}")
+        yield scrapy.Request(
+            url=f"{self.json_url}cards/compare_top3/{response.meta['card_idx']}"
+            ,headers=self.headers
+            ,callback=self.parse_compare_card_data
+        )
 
+    def parse_compare_card_data(self, response):
+        """많이 비교되는 카드 json 데이터 추출 함수"""
+
+        res = requests.get(response.url, headers=self.headers)
+        data = res.json()
+
+        print(data)
