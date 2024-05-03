@@ -187,6 +187,7 @@ class CardGorillaSpider(scrapy.Spider):
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
 
+        compare_card_list = [] # 많이 비교된 카드 리스트 - [많이 비교된 카드 img url, 많이 비교된 카드명, 많이 비교된 카드사명, 많이 비교된 카드 연회비 기본, 많이 비교된 카드 전월실적]
         for compare_card in data:
             compare_card_img = compare_card['card_img']['url'] # 많이 비교된 카드 img url
             compare_card_name = compare_card['name'] # 많이 비교된 카드명
@@ -199,5 +200,6 @@ class CardGorillaSpider(scrapy.Spider):
                 compare_card_pre_month_money = f"전월실적 {compare_card_pre_month_money[:3]}만원 이상"
             else:
                 compare_card_pre_month_money = "전월실적 없음"
+            compare_card_list.append([compare_card_img, compare_card_name, compare_card_corp_name, compare_card_annual_fee_basic, compare_card_pre_month_money])
 
-            print(f"{compare_card_pre_month_money}")
+        print(f"{compare_card_list}")
