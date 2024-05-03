@@ -190,6 +190,14 @@ class CardGorillaSpider(scrapy.Spider):
         for compare_card in data:
             compare_card_img = compare_card['card_img']['url'] # 많이 비교된 카드 img url
             compare_card_name = compare_card['name'] # 많이 비교된 카드명
-            compare_card_corp_name = compare_card['corp']['name']
+            compare_card_corp_name = compare_card['corp']['name'] # 많이 비교된 카드사명
+            compare_card_annual_fee_basic = compare_card['annual_fee_basic'] # 많이 비교된 카드 연회비 기본
+            compare_card_pre_month_money = str(compare_card['pre_month_money']) # 많이 비교된 카드 전월실적
+            if len(compare_card_pre_month_money) == 6:
+                compare_card_pre_month_money = f"전월실적 {compare_card_pre_month_money[:2]}만원 이상"
+            elif len(compare_card_pre_month_money) == 7:
+                compare_card_pre_month_money = f"전월실적 {compare_card_pre_month_money[:3]}만원 이상"
+            else:
+                compare_card_pre_month_money = "전월실적 없음"
 
-            print(f"{compare_card_corp_name}")
+            print(f"{compare_card_pre_month_money}")
