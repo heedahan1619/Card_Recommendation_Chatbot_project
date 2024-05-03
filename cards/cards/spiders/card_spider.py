@@ -190,5 +190,6 @@ class CardGorillaSpider(scrapy.Spider):
         for compare_card in data:
             compare_card_img = compare_card['card_img']['url'] # 많이 비교된 카드 img url
             compare_card_name = compare_card['name'] # 많이 비교된 카드명
+            compare_card_corp_name = compare_card['corp']['name']
 
-            print(f"{compare_card_name}")
+            print(f"{compare_card_corp_name}")
