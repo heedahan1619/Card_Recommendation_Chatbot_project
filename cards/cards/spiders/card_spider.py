@@ -140,8 +140,6 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_add_card_data(self, response):
         """추가적인 카드 json 데이터 로드"""
 
-        print(f"\n{response.url}")
-
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
 
@@ -184,7 +182,11 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_compare_card_data(self, response):
         """많이 비교되는 카드 json 데이터 추출 함수"""
 
+        print(f"\n{response.url}")
+
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
 
-        print(data)
+        for compare_card in data:
+            compare_card_img = compare_card['card_img']['url'] # 많이 비교된 카드 img url
+            print(f"{compare_card_img}")
