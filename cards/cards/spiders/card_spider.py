@@ -116,17 +116,15 @@ class CardGorillaSpider(scrapy.Spider):
                         search_benefit_label_list.append(search_benefit_label)
                     search_benefit_dict[search_benefit_title] = search_benefit_label_list
                 
-                global top_benefit_dict
-                top_benefit_dict = {} # 상위 혜택 딕셔너리 - {상위 혜택 태그:[상위 혜택 로고 이미지 url, 상위 혜택 타이틀]}
-                top_benefit_title_list = [] # 상위 혜택 타이틀 리스트
-                top_benefit_tags_list = [] # 상위 혜택 태그 리스트
+                top_benefit_list = [] # 상위 혜택 리스트 생성 - [상위 혜택 고로 이미지 url, 상위 혜택 태그, 상위 혜택 타이틀]
                 for top_benefit in data[i]['top_benefit']:
                     top_benefit_title = top_benefit['title'] # 상위 혜택 타이틀
-                    top_benefit_title_list.append(top_benefit_title)
                     top_benefit_tags = f"{top_benefit['tags'][0]} {top_benefit['tags'][1]} {top_benefit['tags'][2]}" # 상위 혜택 태그
-                    top_benefit_tags_list.append(top_benefit_tags)
-                    top_benefit_logo_img_url = top_benefit['logo_img']['url']
-                    top_benefit_dict[top_benefit_tags] = [top_benefit_logo_img_url, top_benefit_title]
+                    top_benefit_logo_img_url = top_benefit['logo_img']['url'] # 상위 헤택 로고 이미지 url
+                    top_benefit_list.append([top_benefit_logo_img_url, top_benefit_tags, top_benefit_title])
+
+                for top_benefits in top_benefit_list:
+                    print(f"\n{top_benefits}")
 
                 yield scrapy.Request(
                     url=f"{self.json_url}cards/{card_idx}"
@@ -146,7 +144,7 @@ class CardGorillaSpider(scrapy.Spider):
         annual_fee_detail = data['annual_fee_detail'] # 연회비 상세안내
         annual_fee_detail = re.sub(r'\<p(\s(\S)+)+\>|\<\S+\>', '', annual_fee_detail).replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&').strip()
 
-        awards_list = [] # 수상 내역 리스트 - [수상 내역]
+        awards_list = [] # 수상 리스트 - [수상 내역]
         for awards in data['awards']:
             awards_title = awards['title'] # 수상 타이틀
             awards_contents = awards['contents'] # 수상 내역
@@ -154,9 +152,6 @@ class CardGorillaSpider(scrapy.Spider):
             awards_contents = re.sub(r'\<(\/)?\S+(\s\S+)?\>|\<\S+((\s\S+)+)?\>', '', awards_contents).strip()
             if awards_contents != '':
                 awards_list.append(awards_contents)
-        
-        for awards in awards_list:
-            print(f"\n{awards}")
 
         brand_list = [] # 브랜드 리스트 - [브랜드코드, 브랜드 로고 이미지 url]
         for brand in data['brand']:
