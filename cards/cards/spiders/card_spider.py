@@ -155,13 +155,16 @@ class CardGorillaSpider(scrapy.Spider):
             if awards_contents != '':
                 awards_list.append(awards_contents)
 
-        brand_list = [] # 브랜드 리스트
+        brand_list = [] # 브랜드 리스트 - [브랜드코드, 브랜드 로고 이미지 url]
         for brand in data['brand']:
             brand_idx = brand['idx'] # 브랜드 인덱스
             brand_name = brand['name'] # 브랜드명
             brand_code = brand['code'] # 브랜드코드
             brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
-            brand_list.append(brand_code)
+            brand_list.append([brand_code, brand_logo_img_url])
+
+        for brands in brand_list:
+            print(brands)
 
         key_benefit_list = [] # 주요혜택 리스트 - [주요혜택 로고 이미지 url, 주요혜택 타이틀, 주요혜택 내용, 주요혜택 상세안내]
         for key_benefit in data['key_benefit']:
@@ -182,8 +185,6 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_compare_card_data(self, response):
         """많이 비교되는 카드 json 데이터 추출 함수"""
 
-        print(f"\n{response.url}")
-
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
 
@@ -201,5 +202,3 @@ class CardGorillaSpider(scrapy.Spider):
             else:
                 compare_card_pre_month_money = "전월실적 없음"
             compare_card_list.append([compare_card_img, compare_card_name, compare_card_corp_name, compare_card_annual_fee_basic, compare_card_pre_month_money])
-
-        print(f"{compare_card_list}")
