@@ -146,7 +146,7 @@ class CardGorillaSpider(scrapy.Spider):
         annual_fee_detail = data['annual_fee_detail'] # 연회비 상세안내
         annual_fee_detail = re.sub(r'\<p(\s(\S)+)+\>|\<\S+\>', '', annual_fee_detail).replace('<br>', '\n').replace('&nbsp;', ' ').replace('&lsquo;', '‘').replace('&rsquo;;', '’').replace('&amp;', '&').strip()
 
-        awards_list = [] # 수상 내역 리스트
+        awards_list = [] # 수상 내역 리스트 - [수상 내역]
         for awards in data['awards']:
             awards_title = awards['title'] # 수상 타이틀
             awards_contents = awards['contents'] # 수상 내역
@@ -154,6 +154,9 @@ class CardGorillaSpider(scrapy.Spider):
             awards_contents = re.sub(r'\<(\/)?\S+(\s\S+)?\>|\<\S+((\s\S+)+)?\>', '', awards_contents).strip()
             if awards_contents != '':
                 awards_list.append(awards_contents)
+        
+        for awards in awards_list:
+            print(f"\n{awards}")
 
         brand_list = [] # 브랜드 리스트 - [브랜드코드, 브랜드 로고 이미지 url]
         for brand in data['brand']:
@@ -162,9 +165,6 @@ class CardGorillaSpider(scrapy.Spider):
             brand_code = brand['code'] # 브랜드코드
             brand_logo_img_url = brand['logo_img']['url'] # 브랜드 로고 이미지 url
             brand_list.append([brand_code, brand_logo_img_url])
-
-        for brands in brand_list:
-            print(brands)
 
         key_benefit_list = [] # 주요혜택 리스트 - [주요혜택 로고 이미지 url, 주요혜택 타이틀, 주요혜택 내용, 주요혜택 상세안내]
         for key_benefit in data['key_benefit']:
