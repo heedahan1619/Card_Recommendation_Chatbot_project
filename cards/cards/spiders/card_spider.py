@@ -27,8 +27,9 @@ class CardGorillaSpider(scrapy.Spider):
             )
         ]
     
+
     def parse_company_data(self, response):
-        """카드사 딕셔너리 생성"""
+        """카드사 딕셔너리 생성 함수"""
 
         url = f"{self.json_url}card_corps"
 
@@ -58,8 +59,9 @@ class CardGorillaSpider(scrapy.Spider):
                     ,callback=self.parse_card_data
                 )
 
+
     def parse_card_data(self, response):
-        """카드 json 데이터 로드"""
+        """카드 json 데이터 로드 함수"""
 
         res = requests.get(response.url, headers=self.headers)
         data = res.json()['data']
@@ -135,8 +137,9 @@ class CardGorillaSpider(scrapy.Spider):
                     }
                 )
 
+
     def parse_add_card_data(self, response):
-        """추가적인 카드 json 데이터 로드"""
+        """추가적인 카드 json 데이터 로드 함수"""
 
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
@@ -190,10 +193,11 @@ class CardGorillaSpider(scrapy.Spider):
             }
         )
 
+
     def parse_compare_card_data(self, response):
         """많이 비교되는 카드 json 데이터 추출 함수"""
 
-        print(f"{response.meta}")
+        print(f"\n{response.meta}")
 
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
@@ -212,3 +216,28 @@ class CardGorillaSpider(scrapy.Spider):
             else:
                 compare_card_pre_month_money = "전월실적 없음"
             compare_card_list.append([compare_card_img, compare_card_name, compare_card_corp_name, compare_card_annual_fee_basic, compare_card_pre_month_money])
+
+        yield scrapy.Request(
+            url=self.json_url # 
+            ,headers=self.headers
+            ,callback=self.parse_card_items
+            ,meta={
+                "card_idx": response.meta['card_idx']
+                ,"card_type": response.meta['card_type']
+                ,"annual_fee_basic": response.meta['annual_fee_basic']
+                ,"card_img_url": response.meta['card_img_url']
+                ,"card_cate": response.meta['card_cate']
+                ,"corp_name": response.meta['corp_name']
+                ,"card_name": response.meta['card_name']
+                ,"annual_fee_detail": response.meta['annual_fee_detail']
+                ,"awards_list": response.meta['awards_list']
+                ,"brand_list": response.meta['brand_list']
+                ,"key_benefit_list": response.meta['key_benefit_list']
+            }
+        )
+
+
+    def parse_card_items(self, response):
+        """카드 item 추출 함수"""
+
+        print(f"{response.meta}")
