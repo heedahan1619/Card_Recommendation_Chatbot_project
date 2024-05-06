@@ -1,6 +1,7 @@
 import scrapy
 import requests
 import re
+from cards.items import CardsItem
 
 class CardGorillaSpider(scrapy.Spider):
     """카드고릴라 사이트 spider"""
@@ -197,8 +198,6 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_compare_card_data(self, response):
         """많이 비교되는 카드 json 데이터 추출 함수"""
 
-        print(f"\n{response.meta}")
-
         res = requests.get(response.url, headers=self.headers)
         data = res.json()
 
@@ -218,7 +217,7 @@ class CardGorillaSpider(scrapy.Spider):
             compare_card_list.append([compare_card_img, compare_card_name, compare_card_corp_name, compare_card_annual_fee_basic, compare_card_pre_month_money])
 
         yield scrapy.Request(
-            url=self.json_url # 
+            url=f"{self.json_url}cards/compare_top3/{response.meta['card_idx']}" # 많이 비교되는 카드 json 데이터 url
             ,headers=self.headers
             ,callback=self.parse_card_items
             ,meta={
@@ -233,6 +232,7 @@ class CardGorillaSpider(scrapy.Spider):
                 ,"awards_list": response.meta['awards_list']
                 ,"brand_list": response.meta['brand_list']
                 ,"key_benefit_list": response.meta['key_benefit_list']
+                ,"compare_card_list": compare_card_list
             }
         )
 
@@ -240,4 +240,6 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
-        print(f"{response.meta}")
+        print(f"\n{response.meta}")
+
+        
