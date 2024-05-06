@@ -217,7 +217,7 @@ class CardGorillaSpider(scrapy.Spider):
             compare_card_list.append([compare_card_img, compare_card_name, compare_card_corp_name, compare_card_annual_fee_basic, compare_card_pre_month_money])
 
         yield scrapy.Request(
-            url=f"{self.json_url}cards/compare_top3/{response.meta['card_idx']}" # 많이 비교되는 카드 json 데이터 url
+            url="http://www.card-gorilla.com/home"
             ,headers=self.headers
             ,callback=self.parse_card_items
             ,meta={
@@ -240,6 +240,6 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
-        print(f"\n{response.meta}")
+        print(f"{response.meta}")
 
         
