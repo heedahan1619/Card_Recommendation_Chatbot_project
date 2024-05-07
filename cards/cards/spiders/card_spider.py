@@ -139,6 +139,7 @@ class CardGorillaSpider(scrapy.Spider):
                         ,"annual_fee_basic": annual_fee_basic
                         ,"card_img_url": card_img_url
                         ,"card_cate": card_cate
+                        ,"corp_idx": corp_idx
                         ,"corp_name": corp_name
                         ,"card_name": card_name
                         ,"only_online": only_online
@@ -197,6 +198,7 @@ class CardGorillaSpider(scrapy.Spider):
                 ,"annual_fee_basic": response.meta['annual_fee_basic']
                 ,"card_img_url": response.meta['card_img_url']
                 ,"card_cate": response.meta['card_cate']
+                ,"corp_idx": response.meta['corp_idx']
                 ,"corp_name": response.meta['corp_name']
                 ,"card_name": response.meta['card_name']
                 ,"only_online": response.meta['only_online']
@@ -235,15 +237,16 @@ class CardGorillaSpider(scrapy.Spider):
             compare_card_list.append([compare_card_img, compare_card_name, compare_card_corp_name, compare_card_annual_fee_basic, compare_card_pre_month_money])
 
         yield scrapy.Request(
-            url="http://www.card-gorilla.com/home"
+            url=f"https://api.card-gorilla.com:8080/v1/charts/ranking?term=monthly&card_gb=CRD&limit=6&chart=corp&idx={response.meta['corp_idx']}&idx{response.meta['corp_idx']}=" # 카드사별 인기순위 url
             ,headers=self.headers
-            ,callback=self.parse_card_items
+            ,callback=self.parse_monthly_ranking
             ,meta={
                 "card_idx": response.meta['card_idx']
                 ,"card_type": response.meta['card_type']
                 ,"annual_fee_basic": response.meta['annual_fee_basic']
                 ,"card_img_url": response.meta['card_img_url']
                 ,"card_cate": response.meta['card_cate']
+                ,"corp_idx": response.meta['corp_idx']
                 ,"corp_name": response.meta['corp_name']
                 ,"card_name": response.meta['card_name']
                 ,"only_online": response.meta['only_online']
@@ -260,8 +263,11 @@ class CardGorillaSpider(scrapy.Spider):
             }
         )
 
+    
+    def parse_monthly_ranking(self, response):
+        """카드사별 인기순위 추출 함수"""
 
-    def parse_card_items(self, response):
-        """카드 item 추출 함수"""
-
-        print(f"\n{response.meta}")
+        res = requests.get(response.url)
+        for data in res.json():
+            print(f"\n{data}")
+        
