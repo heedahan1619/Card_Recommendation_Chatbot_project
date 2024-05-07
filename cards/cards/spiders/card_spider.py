@@ -55,7 +55,7 @@ class CardGorillaSpider(scrapy.Spider):
             
             for page in range(1, self.page_request+1):
                 yield scrapy.Request(
-                    url=f"{self.json_url}cards/search?p={page}&perPage=30&corp={company_idx}"
+                    url=f"{self.json_url}cards/search?p={page}&perPage=30&corp={company_idx}" # 카드사별 카드 전체보기 url
                     ,headers=self.headers
                     ,callback=self.parse_card_data
                 )
@@ -135,6 +135,10 @@ class CardGorillaSpider(scrapy.Spider):
                         ,"card_cate": card_cate
                         ,"corp_name": corp_name
                         ,"card_name": card_name
+                        ,"only_online": only_online
+                        ,"is_discon": is_discon
+                        ,"search_benefit_dict": search_benefit_dict
+                        ,"top_benefit_list": top_benefit_list
                     }
                 )
 
@@ -187,6 +191,10 @@ class CardGorillaSpider(scrapy.Spider):
                 ,"card_cate": response.meta['card_cate']
                 ,"corp_name": response.meta['corp_name']
                 ,"card_name": response.meta['card_name']
+                ,"only_online": response.meta['only_online']
+                ,"is_discon": response.meta['is_discon']
+                ,"search_benefit_dict": response.meta['search_benefit_dict']
+                ,"top_benefit_list": response.meta['top_benefit_list']
                 ,"annual_fee_detail": annual_fee_detail
                 ,"awards_list": awards_list
                 ,"brand_list": brand_list
@@ -228,6 +236,10 @@ class CardGorillaSpider(scrapy.Spider):
                 ,"card_cate": response.meta['card_cate']
                 ,"corp_name": response.meta['corp_name']
                 ,"card_name": response.meta['card_name']
+                ,"only_online": response.meta['only_online']
+                ,"is_discon": response.meta['is_discon']
+                ,"search_benefit_dict": response.meta['search_benefit_dict']
+                ,"top_benefit_list": response.meta['top_benefit_list']
                 ,"annual_fee_detail": response.meta['annual_fee_detail']
                 ,"awards_list": response.meta['awards_list']
                 ,"brand_list": response.meta['brand_list']
@@ -240,6 +252,4 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
-        print(f"{response.meta}")
-
-        
+        print(f"\n{response.meta}")
