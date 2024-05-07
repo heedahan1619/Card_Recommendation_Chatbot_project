@@ -92,6 +92,13 @@ class CardGorillaSpider(scrapy.Spider):
                     only_online = "온라인발급 전용 카드"
                 else:
                     only_online = ""
+
+                pr_container = data[i]['pr_container'] # 카드 이벤트 문구
+                if pr_container == None:
+                    pr_container = ''
+                else:
+                    pr_container = re.sub(r"\<(\/)?(p|li|ul)(\s\S+)?\>", "", pr_container)
+                print(f"\n{pr_container}")
                 
                 pre_month_money = str(data[i]['pre_month_money']) # 전월실적
                 if len(pre_month_money) == 6:
@@ -252,4 +259,4 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
-        print(f"\n{response.meta}")
+        # print(f"\n{response.meta}")
