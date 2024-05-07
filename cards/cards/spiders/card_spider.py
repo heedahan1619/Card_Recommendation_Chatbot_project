@@ -98,7 +98,6 @@ class CardGorillaSpider(scrapy.Spider):
                     pr_container = ''
                 else:
                     pr_container = re.sub(r"\<(\/)?(p|li|ul)(\s\S+)?\>", "", pr_container)
-                print(f"\n{pr_container}")
                 
                 pre_month_money = str(data[i]['pre_month_money']) # 전월실적
                 if len(pre_month_money) == 6:
@@ -143,6 +142,8 @@ class CardGorillaSpider(scrapy.Spider):
                         ,"corp_name": corp_name
                         ,"card_name": card_name
                         ,"only_online": only_online
+                        ,"pr_container": pr_container
+                        ,"pre_month_money": pre_month_money
                         ,"is_discon": is_discon
                         ,"search_benefit_dict": search_benefit_dict
                         ,"top_benefit_list": top_benefit_list
@@ -199,6 +200,8 @@ class CardGorillaSpider(scrapy.Spider):
                 ,"corp_name": response.meta['corp_name']
                 ,"card_name": response.meta['card_name']
                 ,"only_online": response.meta['only_online']
+                ,"pr_container": response.meta['pr_container']
+                ,"pre_month_money": response.meta['pre_month_money']
                 ,"is_discon": response.meta['is_discon']
                 ,"search_benefit_dict": response.meta['search_benefit_dict']
                 ,"top_benefit_list": response.meta['top_benefit_list']
@@ -244,6 +247,8 @@ class CardGorillaSpider(scrapy.Spider):
                 ,"corp_name": response.meta['corp_name']
                 ,"card_name": response.meta['card_name']
                 ,"only_online": response.meta['only_online']
+                ,"pr_container": response.meta['pr_container']
+                ,"pre_month_money": response.meta['pre_month_money']
                 ,"is_discon": response.meta['is_discon']
                 ,"search_benefit_dict": response.meta['search_benefit_dict']
                 ,"top_benefit_list": response.meta['top_benefit_list']
@@ -259,4 +264,4 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
-        # print(f"\n{response.meta}")
+        print(f"\n{response.meta}")
