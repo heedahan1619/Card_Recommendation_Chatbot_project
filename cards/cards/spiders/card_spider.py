@@ -270,6 +270,7 @@ class CardGorillaSpider(scrapy.Spider):
         res = requests.get(response.url)
         for data in res.json():
             ranking = f"{str(data['ranking'])}위" # 순위
+            card_img_url = f"https://api.card-gorilla.com:8080{str(data['card_img'])}" # 카드 이미지 url
 
-            print(f"\n{ranking}")
+            print(f"\n{card_img_url}")
         
