@@ -267,6 +267,7 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_monthly_ranking(self, response):
         """카드사별 인기순위 추출 함수"""
 
+        ranking_dict = {} # 카드사별 인기순위 딕셔너리 생성 - {카드사 인기순위: 카드사별 인기순위 리스트}
         ranking_list = [] # 카드사별 인기순위 리스트 생성 - [순위, 카드 이미지 url, 카드명]
         res = requests.get(response.url)
         for data in res.json():
@@ -275,6 +276,7 @@ class CardGorillaSpider(scrapy.Spider):
             name = data['name'] # 카드명
             corp = f"{str(data['corp'].split(",")[1].split(":")[1].replace('"', ""))} 인기순위" # 카드사명
             ranking_list.append([ranking, card_img, name])
+            ranking_dict[corp] = ranking_list
 
-            print(f"\n{ranking_list}")  
+        print(f"\n{ranking_dict}")  
         
