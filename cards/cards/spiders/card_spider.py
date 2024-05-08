@@ -269,5 +269,7 @@ class CardGorillaSpider(scrapy.Spider):
 
         res = requests.get(response.url)
         for data in res.json():
-            print(f"\n{data}")
+            ranking = f"{str(data['ranking'])}위" # 순위
+
+            print(f"\n{ranking}")
         
