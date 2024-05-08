@@ -267,13 +267,14 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_monthly_ranking(self, response):
         """카드사별 인기순위 추출 함수"""
 
-        ranking_list = []
+        ranking_list = [] # 카드사별 인기순위 리스트 생성 - [순위, 카드 이미지 url, 카드명]
         res = requests.get(response.url)
         for data in res.json():
             ranking = f"{str(data['ranking'])}위" # 순위
             card_img = f"https://api.card-gorilla.com:8080{str(data['card_img'])}" # 카드 이미지 url
             name = data['name'] # 카드명
-            corp = data['corp'].split(",")[1].split(":")[1].replace('"', "") # 카드사명
+            corp = f"{str(data['corp'].split(",")[1].split(":")[1].replace('"', ""))} 인기순위" # 카드사명
+            ranking_list.append([ranking, card_img, name])
 
-            print(f"\n{corp}")  
+            print(f"\n{ranking_list}")  
         
