@@ -278,5 +278,37 @@ class CardGorillaSpider(scrapy.Spider):
             ranking_list.append([ranking, card_img, name])
             ranking_dict[corp] = ranking_list
 
-        print(f"\n{ranking_dict}")  
+        yield scrapy.Request(
+            url="http://www.card-gorilla.com/home"
+            ,headers=self.headers
+            ,callback=self.parse_card_items
+            ,meta={
+                "card_idx": response.meta['card_idx']
+                ,"card_type": response.meta['card_type']
+                ,"annual_fee_basic": response.meta['annual_fee_basic']
+                ,"card_img_url": response.meta['card_img_url']
+                ,"card_cate": response.meta['card_cate']
+                ,"corp_idx": response.meta['corp_idx']
+                ,"corp_name": response.meta['corp_name']
+                ,"card_name": response.meta['card_name']
+                ,"only_online": response.meta['only_online']
+                ,"pr_container": response.meta['pr_container']
+                ,"pre_month_money": response.meta['pre_month_money']
+                ,"is_discon": response.meta['is_discon']
+                ,"search_benefit_dict": response.meta['search_benefit_dict']
+                ,"top_benefit_list": response.meta['top_benefit_list']
+                ,"annual_fee_detail": response.meta['annual_fee_detail']
+                ,"awards_list": response.meta['awards_list']
+                ,"brand_list": response.meta['brand_list']
+                ,"key_benefit_list": response.meta['key_benefit_list']
+                ,"compare_card_list": response.meta['compare_card_list']
+                ,"ranking_dict": ranking_dict
+            }
+        )
+
+    
+    def parse_card_items(self, response):
+        """카드 item 추출 함수"""
+
+        print(f"\n{response.meta}")
         
