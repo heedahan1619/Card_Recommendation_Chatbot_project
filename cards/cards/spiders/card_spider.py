@@ -310,5 +310,27 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
-        print(f"\n{response.meta}")
+        item = CardsItem()
         
+        item['card_idx'] = response.meta['card_idx']
+        item['card_type'] = response.meta['card_type']
+        item['annual_fee_basic'] = response.meta['annual_fee_basic']
+        item['card_name'] = response.meta['card_name']
+        item['card_img_url'] = response.meta['card_img_url']
+        item['card_name'] = response.meta['card_name']
+        item['corp_name'] = response.meta['corp_name']
+        item['pr_container'] = response.meta['pr_container']
+        item['pre_month_money'] = response.meta['pre_month_money']
+        item['is_discon'] = response.meta['is_discon']
+        item['search_benefit_dict'] = response.meta['search_benefit_dict']
+        item['top_benefit_list'] = response.meta['top_benefit_list']
+        item['awards_list'] = response.meta['awards_list']
+        item['brand_list'] = response.meta['brand_list']
+        item['only_online'] = response.meta['only_online']
+        item['key_benefit_list'] = response.meta['key_benefit_list']
+        item['compare_card_list'] = response.meta['compare_card_list']
+        item['ranking_dict'] = response.meta['ranking_dict']
+
+        print(f"\n{item}")
+
+        return item
