@@ -130,7 +130,7 @@ class CardGorillaSpider(scrapy.Spider):
                     top_benefit_list.append([top_benefit_logo_img_url, top_benefit_tags, top_benefit_title])
 
                 yield scrapy.Request(
-                    url=f"{self.json_url}cards/{card_idx}"
+                    url=f"{self.json_url}cards/{card_idx}" # 카드 json 데이터
                     ,headers=self.headers
                     ,callback=self.parse_add_card_data
                     ,meta={
@@ -311,26 +311,27 @@ class CardGorillaSpider(scrapy.Spider):
         """카드 item 추출 함수"""
 
         item = CardsItem()
-        
-        item['card_idx'] = response.meta['card_idx']
-        item['card_type'] = response.meta['card_type']
-        item['annual_fee_basic'] = response.meta['annual_fee_basic']
-        item['card_name'] = response.meta['card_name']
-        item['card_img_url'] = response.meta['card_img_url']
-        item['card_name'] = response.meta['card_name']
-        item['corp_name'] = response.meta['corp_name']
-        item['pr_container'] = response.meta['pr_container']
-        item['pre_month_money'] = response.meta['pre_month_money']
-        item['is_discon'] = response.meta['is_discon']
-        item['search_benefit_dict'] = response.meta['search_benefit_dict']
-        item['top_benefit_list'] = response.meta['top_benefit_list']
-        item['awards_list'] = response.meta['awards_list']
-        item['brand_list'] = response.meta['brand_list']
-        item['only_online'] = response.meta['only_online']
-        item['key_benefit_list'] = response.meta['key_benefit_list']
-        item['compare_card_list'] = response.meta['compare_card_list']
-        item['ranking_dict'] = response.meta['ranking_dict']
+        for page in range(1, 11):
+            item['url'] = f"{self.json_url}cards/search?p={page}&perPage=30&corp={response.meta['corp_idx']}"
+            item['card_idx'] = response.meta['card_idx']
+            item['card_type'] = response.meta['card_type']
+            item['annual_fee_basic'] = response.meta['annual_fee_basic']
+            item['card_name'] = response.meta['card_name']
+            item['card_img_url'] = response.meta['card_img_url']
+            item['card_name'] = response.meta['card_name']
+            item['corp_name'] = response.meta['corp_name']
+            item['pr_container'] = response.meta['pr_container']
+            item['pre_month_money'] = response.meta['pre_month_money']
+            item['is_discon'] = response.meta['is_discon']
+            item['search_benefit_dict'] = response.meta['search_benefit_dict']
+            item['top_benefit_list'] = response.meta['top_benefit_list']
+            item['awards_list'] = response.meta['awards_list']
+            item['brand_list'] = response.meta['brand_list']
+            item['only_online'] = response.meta['only_online']
+            item['key_benefit_list'] = response.meta['key_benefit_list']
+            item['compare_card_list'] = response.meta['compare_card_list']
+            item['ranking_dict'] = response.meta['ranking_dict']
 
-        print(f"\n{item}")
+            print(f"{item}")
 
-        return item
+            return item
