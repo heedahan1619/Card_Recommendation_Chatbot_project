@@ -9,7 +9,6 @@ import scrapy
 class CardsItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    url = scrapy.Field() # json 파일 url
     card_idx = scrapy.Field() # 카드 인덱스
     card_type = scrapy.Field() # 카드 타입
     annual_fee_basic = scrapy.Field() # 연회비 일반
