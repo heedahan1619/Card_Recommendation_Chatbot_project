@@ -5,9 +5,22 @@
 
 
 # useful for handling different item types with a single interface
+import json
 from itemadapter import ItemAdapter
 
+class JsonWritePipeline:
+    """Json파일로 저장"""
 
-class CardsPipeline:
+    def open_spider(self, spider):
+        """크롤링 시작 작업"""
+        self.file = open('items.jsonl', 'w')
+
+    def close_spider(self, spider):
+        """크롤링 후 작업"""
+        self.file.close()
+
     def process_item(self, item, spider):
+        """크롤링 한 item을 저장"""
+        line = json.dumps(ItemAdapter(item).asdict()) + "\n"
+        self.file.write(line)
         return item
