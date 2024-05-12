@@ -8,8 +8,8 @@
 import json
 from itemadapter import ItemAdapter
 
-class JsonWritePipeline:
-    """Json파일로 저장"""
+class CardsPipeline:
+    """크롤링 작업 후 Json파일로 저장"""
 
     def open_spider(self, spider):
         """크롤링 시작 작업"""
