@@ -13,11 +13,11 @@ class CardsPipeline:
 
     def open_spider(self, spider):
         """크롤링 시작 작업"""
-        self.file = open('items.jsonl', 'w')
+        pass
 
     def close_spider(self, spider):
         """크롤링 후 작업"""
-        self.file.close()
+        pass
 
     def process_item(self, item, spider):
         """크롤링 한 item을 저장"""
