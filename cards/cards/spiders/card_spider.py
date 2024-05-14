@@ -315,6 +315,7 @@ class CardGorillaSpider(scrapy.Spider):
     def parse_card_items(self, response):
         """카드 item 추출 함수"""
 
+        global item
         item = CardsItem()
 
         for page in range(1, self.page_request+1):
