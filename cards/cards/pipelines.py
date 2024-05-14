@@ -5,7 +5,9 @@
 
 
 # useful for handling different item types with a single interface
+import os
 import json
+import types
 from itemadapter import ItemAdapter
 
 class CardsPipeline:
@@ -13,14 +15,17 @@ class CardsPipeline:
 
     def open_spider(self, spider):
         """크롤링 시작 작업"""
-        pass
+        self.file = open("items.json", "w", encoding="utf-8")
 
-    def close_spider(self, spider):
-        """크롤링 후 작업"""
-        pass
 
     def process_item(self, item, spider):
-        """크롤링 한 item을 저장"""
+        """크롤링 한 데이터를 지정한 양식에 맞추고, 이를 저장"""
+
         line = json.dumps(ItemAdapter(item).asdict()) + "\n"
         self.file.write(line)
         return item
+            
+
+    def close_spider(self, spider):
+        """크롤링 후 작업"""
+        self.file.close()
