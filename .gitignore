@@ -1,5 +1,8 @@
 # 확장자가 .log인 파일 무시
 *.log
 
+# 확장자가 .json인 파일 무시
+*.json
+
 # __pycache__ 디렉터리에 있는 모든 파일 무시
 __pycache__/
